@@ -86,6 +86,7 @@
 
         //addventlistener to search button
         searchButton.addEventListener("click",()=>{
+            singleLyrics.innerText=""
             songsDiv.innerHTML="";
             let songSearch = searchInput.value;
             searchLyric(songSearch);
@@ -97,7 +98,19 @@
             .then(responce=>responce.json())
             .then(data =>{
                 let songs =data.data;
-                console.log(songs);
+                if (songs.length===0) {
+                    let songDiv =document.createElement("div");
+                    songDiv.className="single-result row align-items-center justify-content-center my-3 p-3";
+                    songDiv.innerText=`no song is available.`;
+                    songsDiv.appendChild(songDiv);
+                } else {
+                    showAllLyrics(songs);
+                }
+            })
+        }
+
+        let showAllLyrics=(songs)=>{
+            console.log(songs);
                 songs.forEach(song => {
                     let songDiv =document.createElement("div");
                     songDiv.className="single-result row align-items-center my-3 p-3"
@@ -116,7 +129,6 @@
                     songsDiv.appendChild(songDiv);
 
                 });
-            })
         }
         
         let getLyrics=(artistName,title)=>{
@@ -124,7 +136,10 @@
             fetch(`https://api.lyrics.ovh/v1/${artistName}/${title}`)
             .then(responce=>responce.json())
             .then(data =>{
-                // console.log(data.lyrics);
+                if (data.lyrics==="") {
+                    singleLyrics.innerText="Lyrics is not available for this song";
+                } else {
+                console.log(data);
                 let lyrics =`
                 ${title}
                  by ${artistName}
@@ -132,7 +147,8 @@
                 ${data.lyrics}
                 `;
                 singleLyrics.innerText=lyrics;
-             })
+                }
+            })
         }
                     
 
