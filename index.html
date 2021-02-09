@@ -91,12 +91,12 @@
             let songSearch = searchInput.value;
             searchLyric(songSearch);
         })
-        //function to searchSong
-        let searchLyric =(songSearch)=>{
+        //function to searchSong//async await
+        let searchLyric = async(songSearch)=>{
             //load data
-            fetch(`https://api.lyrics.ovh/suggest/${songSearch}`)
-            .then(responce=>responce.json())
-            .then(data =>{
+            let responce =await fetch(`https://api.lyrics.ovh/suggest/${songSearch}`);
+            let data = await responce.json();
+            
                 let songs =data.data;
                 if (songs.length===0) {
                     let songDiv =document.createElement("div");
@@ -106,7 +106,7 @@
                 } else {
                     showAllLyrics(songs);
                 }
-            })
+            
         }
 
         let showAllLyrics=(songs)=>{
@@ -135,11 +135,11 @@
                 });
         }
         
-        let getLyrics=(artistName,title)=>{
+        let getLyrics= async (artistName,title)=>{
             //load data
-            fetch(`https://api.lyrics.ovh/v1/${artistName}/${title}`)
-            .then(responce=>responce.json())
-            .then(data =>{
+            let responce = await fetch(`https://api.lyrics.ovh/v1/${artistName}/${title}`);
+            let data = await responce.json();
+           
                 if (data.lyrics==="") {
                     singleLyrics.innerText="Lyrics is not available for this song";
                 } else {
@@ -152,7 +152,7 @@
                 `;
                 singleLyrics.innerText=lyrics;
                 }
-            })
+            
         }
                     
 
